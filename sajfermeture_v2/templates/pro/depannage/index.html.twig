@@ -1,0 +1,150 @@
+{% extends 'base_pro.html.twig' %}
+
+{% block title %}ESPACE PRO - DEPANNAGE{% endblock %}
+
+{% block body %}
+     <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <!-- Masthead Avatar Image-->
+            <img class="masthead-avatar mb-5" src="/assets/img/pro/tournevis.png" alt="..." />
+            <!-- Masthead Heading-->
+
+            <div class="d-flex justify-content-center mt-5" style="width: 100%">
+                <div class="card" style="width: 100%">
+                    <div class="card-header">
+                        <h5 class="card-title text-muted">MA DEMANDE DE DÉPANNAGE</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_errors(form) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_label(form.typeDepannage) }}
+                                    {{ form_widget(form.typeDepannage) }}
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row typePorteClass border p-2 mt-2 " style="display: none">
+                                <div class="col-12">
+                                    <label for="" class="form-label text-muted">Infos porte</label>
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.typePorte) }}    
+                                    {{ form_widget(form.typePorte) }}
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.infoPorte.hauteur) }}
+                                    {{ form_widget(form.infoPorte.hauteur) }}
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.infoPorte.largeur) }}
+                                    {{ form_widget(form.infoPorte.largeur) }}
+                                </div>
+                                <div class="col-3">
+                                    <label for="">Caractéristiques</label>
+                                    {{ form_widget(form.infoPorte.isEcoinCon) }}
+                                    {{ form_widget(form.infoPorte.isPassageLibre) }}
+                                    {{ form_widget(form.infoPorte.isRetombe) }}
+                                </div>
+                            </div>
+
+                            <div class="row typeMoteurClass border p-2 mt-2 "  style="display: none">
+                                <div class="col-12">
+                                    <label for="" class="form-label text-muted">Infos moteur</label>
+                                </div>
+                                <div class="col-4">
+                                    {{ form_label(form.typeMoteur.numeroMoteur) }}
+                                    {{ form_widget(form.typeMoteur.numeroMoteur) }}
+                                </div>
+                                <div class="col-4">
+                                    {{ form_label(form.typeMoteur.voltage) }}
+                                    {{ form_widget(form.typeMoteur.voltage) }}    
+                                </div>
+                                <div class="col-4">
+                                    {{ form_label(form.typeMoteur.typeFonctionnement) }}
+                                    {{ form_widget(form.typeMoteur.typeFonctionnement) }}
+                                </div>
+                            </div>
+
+                            <div class="row border p-2 mt-2">
+                                <div class="col-12">
+                                    {{ form_label(form.description) }}
+                                    {{ form_widget(form.description) }}
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="" class="form-label text-muted">Images</label>
+                                    <p class="text-dark"> Photo de la pieces defectueuses.
+                                         Etiquette du moteur . Vue d'ensemble</p>
+                                    {{ form_widget(form.images) }}
+
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="mt-3 btn btn-success">Envoyer</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $("#demande_pro_form_typeDepannage").on("change", function(){
+                $("#demande_pro_form_typeMoteur_numeroMoteur").prop("required", false)
+                $("#demande_pro_form_typeMoteur_voltage").prop("required", false)
+                $("#demande_pro_form_typeMoteur_typeFonctionnement").prop("required", false)
+                
+                $("#demande_pro_form_infoPorte_hauteur").prop("required", false)
+                $("#demande_pro_form_infoPorte_largeur").prop("required", false)
+                $("#demande_pro_form_infoPorte_isEcoinCon").prop("required", false)
+                $("#demande_pro_form_infoPorte_isPassageLibre").prop("required", false)
+                $("#demande_pro_form_infoPorte_isRetombe").prop("required", false)
+
+                if($("#demande_pro_form_typeDepannage").val() == "porte") {
+                    $(".typePorteClass").show();
+                    $(".infoPorteClass").show();
+                    $("#demande_pro_form_typePorte").show();
+                    $("#demande_pro_form_infoPorte").show();
+                    
+                    $(".typeMoteurClass").hide();
+                    $("#demande_pro_form_typeMoteur").hide();
+                } else if ($("#demande_pro_form_typeDepannage").val() == "moteur") {
+                    $(".typeMoteurClass").show();
+                    $("#demande_pro_form_typeMoteur").show();
+                    
+                    $(".typePorteClass").hide();
+                    $("#demande_pro_form_typePorte").hide();
+                    $(".infoPorteClass").hide();
+                    $("#demande_pro_form_infoPorte").hide();     
+                } else if ($("#demande_pro_form_typeDepannage").val() == "all"){
+                    $(".typePorteClass").show();
+                    $("#demande_pro_form_typePorte").show();
+                    $(".infoPorteClass").show();
+                    $("#demande_pro_form_infoPorte").show();
+                    $(".typeMoteurClass").show();
+                    $("#demande_pro_form_typeMoteur").show();
+                } else {
+                    $(".typePorteClass").hide();
+                    $("#demande_pro_form_typePorte").hide();
+                    $(".typeMoteurClass").hide();
+                    $("#demande_pro_form_typeMoteur").hide();
+                    $(".infoPorteClass").hide();
+                    $("#demande_pro_form_infoPorte").hide();
+                }
+            })
+        })
+
+
+    </script>
+{% endblock %}

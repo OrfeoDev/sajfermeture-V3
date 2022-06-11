@@ -1,0 +1,53 @@
+# Il faut lier la version de notre docker-compose avec celle de notre docker installé sur la machine
+version: "3.7"
+
+# Services list
+services:
+    # PHP and apache service
+    safermeture-app:
+        container_name: safermeture_app
+        build: 
+            context: ./docker/php
+        working_dir: /var/www/
+        volumes:
+            - ./docker/php/vhosts:/etc/apache2/sites-enabled
+            - ./:/var/www
+        restart: always
+        ports:
+          - 8989:80
+        networks: 
+            - safermeture-network
+
+    # MySQL database service
+    safermeture-db-2:
+        container_name: safermeture_db_2
+        build:
+            context: ./docker/database
+        restart: always
+        volumes:
+            - ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./docker/datalogs/data:/var/lib/mysql
+        environment: 
+            - MYSQL_DATABASE=sajfermeturesv2
+            - MYSQL_USER=DATABASE_USER=appuser
+            - MYSQL_PASSWORD=apppassword
+            - MYSQL_ROOT_PASSWORD=secret
+        networks:
+            - safermeture-network
+
+    # PHPMYADMIN service
+    safermeture-phpmyadmin:
+        image: phpmyadmin
+        container_name: safermeture_phpmyadmin
+        depends_on:
+            - safermeture-db-2
+        ports:
+          - 4141:80
+        environment: 
+            PMA_HOST: safermeture-db-2
+        networks:
+            - safermeture-network
+
+            
+networks:
+    safermeture-network:

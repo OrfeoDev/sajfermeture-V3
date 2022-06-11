@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Form\Pro\Compte;
+
+use App\Entity\Client\Pro\Professionnel;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CreateProFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('lastName', TextType::class, [
+                "label" => "Nom"
+            ])
+            ->add('firstName', TextType::class, [
+                "label" => "Prénom"
+            ])
+            ->add('email', EmailType::class, [
+                "label" => "Email"
+            ])
+            ->add('phone', TextType::class, [
+                "label" => "Téléphone pro"
+            ])
+            ->add('city', TextType::class, [
+                "label" => "Ville"
+            ])
+            ->add('postalCode', TextType::class, [
+                "label" => "Code postal"
+            ])
+            ->add('address', TextType::class, [
+                "label" => "Adresse"
+            ])
+            ->add('country', CountryType::class, [
+                "label" => "Pays"
+            ])
+            ->add('socialReason', TextType::class, [
+                "label" => "Nom de l'entreprise"
+            ])
+            ->add('siret', TextType::class, [
+                "label" => "Numéro de siret"
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Professionnel::class,
+        ]);
+    }
+}

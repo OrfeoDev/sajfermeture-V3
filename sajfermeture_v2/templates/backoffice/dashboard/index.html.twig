@@ -1,0 +1,793 @@
+{% extends 'base_backoffice.html.twig' %}
+
+{% block title %}TABLEAU DE BORD{% endblock %}
+
+{% block body %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">TABLEAU DE BORD</h1>
+        {# <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> #}
+    </div>
+
+    <!-- Content Row indicators -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Demandes de dépannages non traitées</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesProTodo|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Demandes de dépannages traitées</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesProDone|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Dépannage de type porte</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesPortes|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Dépannage de type moteur</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesMoteur|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Demandes de devis non traitées</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesDevisTodo|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Demandes de devis traitées</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ demandesDevisDone|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- Gestion des demandes professionnelles -->
+        <div class="card col-xl-6 col-md-12">
+            <div class="card-header text-center">Gestion des demandes de dépannage</div>
+            <div class="card-body">
+                <table class="table" id="gestionProDatatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Professionnel</th>
+                            <th scope="col">Dénomination sociale</th>
+                            <th scope="col">Type de dépannage</th>
+                            <th scope="col">Statut de la demande</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for demandePro in deamndesPro %}    
+                            <tr>
+                                <th scope="row" class="text-center">{{ demandePro.professionnel }}</th>
+                                <td class="text-center">{{ demandePro.professionnel.socialReason }}</td>
+                                <td class="text-center">{{ demandePro.typeDepannage.libelle }}</td>
+                                <td>
+                                    {% if demandePro.demandeStatut.value == "todo" %}
+                                        <h3><span style="width: 100%" class="shadow text-white badge bg-warning">{{ demandePro.demandeStatut.libelle }}</span></h3>
+                                    {% else %}
+                                        <h3><span style="width: 100%" class="shadow text-white badge bg-success">{{ demandePro.demandeStatut.libelle }}</span></h3>
+                                    {% endif %}
+                                </td>
+                                <td class="d-flex justify-content-between">
+                                    <a href="{{ path('app_backoffice_dashboard_change_status_of_demande', {id: demandePro.id}) }}" onhover="showHisTooltip(this)" class="{% if demandePro.demandeStatut.value == "done" %}disabled{% endif %} d-flex justify-content-center" data-bs-toggle="tooltip" data-bs-placement="left" title="Traiter la demande">
+                                        <img style="width: 32px;" src="/images/backoffice/check.png" alt="">
+                                    </a>
+                                    <a onclick="openModal('#modalPro_{{ demandePro.id }}')" data-bs-toggle="modal" data-bs-target="#modalPro_{{ demandePro.id }}" onhover="showHisTooltip(this)" class="cursor d-flex justify-content-center" data-bs-toggle="tooltip" data-bs-placement="right" title="Afficher la demande">
+                                        <img style="width: 32px;" src="/images/backoffice/depannage.png" alt="">
+                                    </a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalPro_{{ demandePro.id }}" tabindex="-1" aria-labelledby="modalTitle_{{ demandePro.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalTitle_{{ demandePro.id }}">DÉTAIL DE LA DEMANDE - {{ demandePro.typeDepannage.libelle|upper }}</h5>
+                                                    <button type="button" onclick="closeModal('#modalPro_{{ demandePro.id }}')" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body row">
+                                                    <table class="table col-xl-6 col-md-12 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="text-center table-secondary">Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row" class="text-center">{{ demandePro.description }}</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <hr>
+
+                                                    <table class="table col-xl-6 col-md-12 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="text-center table-secondary">Images</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row" class="d-flex justify-content-around">
+                                                                    {% for image in demandePro.images %}
+                                                                        <a class="shadow" target="_blank" href="{{ image.fileName }}">
+                                                                            <img style="width: 128px;" src="{{ image.fileName }}" alt="">
+                                                                        </a>
+                                                                    {% endfor %}
+                                                                </th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                    <table class="table col-12 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="text-center table-secondary">Détails</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th class="">
+                                                                    {% if demandePro.typeDepannage.value == "porte" %}    
+                                                                        <table class="table col-12 table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col" class="text-center">Type de porte</th>
+                                                                                    <th scope="col" class="text-center">Hauteur</th>
+                                                                                    <th scope="col" class="text-center">Largeur</th>
+                                                                                    <th scope="col" class="text-center">Caractéristiques</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typePorte.libelle }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.infoPorte.hauteur }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.infoPorte.largeur }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <ul>
+                                                                                            {% if demandePro.infoPorte.isEcoinCon is defined and demandePro.infoPorte.isEcoinCon is not null and demandePro.infoPorte.isEcoinCon == true %}
+                                                                                                <li>Ecoinçon</li>
+                                                                                            {% endif %}
+
+                                                                                            {% if demandePro.infoPorte.isPassageLibre is defined and demandePro.infoPorte.isPassageLibre is not null and demandePro.infoPorte.isPassageLibre == true %}
+                                                                                                <li>Passage libre</li>
+                                                                                            {% endif %}
+
+                                                                                            {% if demandePro.infoPorte.isRetombe is defined and demandePro.infoPorte.isRetombe is not null and demandePro.infoPorte.isRetombe == true %}
+                                                                                                <li>Retombé de linteau</li>
+                                                                                            {% endif %}
+                                                                                        </ul>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    {% endif %}
+
+                                                                    {% if demandePro.typeDepannage.value == "moteur" %}    
+                                                                        <table class="table col-12 table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col" class="text-center">Numéro moteur</th>
+                                                                                    <th scope="col" class="text-center">Voltage</th>
+                                                                                    <th scope="col" class="text-center">Type de fonctionnement</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.numeroMoteur }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.voltage }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.typeFonctionnement }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    {% endif %}
+
+                                                                    {% if demandePro.typeDepannage.value == "all" %}    
+                                                                        <h5 class="text-muted text-center">Détail de la porte</h5>
+                                                                        <table class="table col-12 table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col" class="text-center">Type de porte</th>
+                                                                                    <th scope="col" class="text-center">Hauteur</th>
+                                                                                    <th scope="col" class="text-center">Largeur</th>
+                                                                                    <th scope="col" class="text-center">Caractéristiques</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typePorte.libelle }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.infoPorte.hauteur }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.infoPorte.largeur }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <ul>
+                                                                                            {% if demandePro.infoPorte.isEcoinCon is defined and demandePro.infoPorte.isEcoinCon is not null and demandePro.infoPorte.isEcoinCon == true %}
+                                                                                                <li>Ecoinçon</li>
+                                                                                            {% endif %}
+
+                                                                                            {% if demandePro.infoPorte.isPassageLibre is defined and demandePro.infoPorte.isPassageLibre is not null and demandePro.infoPorte.isPassageLibre == true %}
+                                                                                                <li>Passage libre</li>
+                                                                                            {% endif %}
+
+                                                                                            {% if demandePro.infoPorte.isRetombe is defined and demandePro.infoPorte.isRetombe is not null and demandePro.infoPorte.isRetombe == true %}
+                                                                                                <li>Retombé de linteau</li>
+                                                                                            {% endif %}
+                                                                                        </ul>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                        <h5 class="text-muted text-center">Détail du moteur</h5>
+                                                                        <table class="table col-12 table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col" class="text-center">Numéro moteur</th>
+                                                                                    <th scope="col" class="text-center">Voltage</th>
+                                                                                    <th scope="col" class="text-center">Type de fonctionnement</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.numeroMoteur }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.voltage }}
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        {{ demandePro.typeMoteur.typeFonctionnement }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    {% endif %}
+                                                                </th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" onclick="closeModal('#modalPro_{{ demandePro.id }}')">Fermer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gestion des demandes de devis -->
+        <div class="card col-xl-6 col-md-12">
+            <div class="card-header text-center">Gestion des demandes de devis</div>
+            <div class="card-body">
+                <table class="table" id="gestionProDevisDatatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Professionnel</th>
+                            <th scope="col">Dénomination sociale</th>
+                            <th scope="col">Statut de la demande</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for demandeDevis in demandeDevis %}    
+                            <tr>
+                                <th scope="row" class="text-center">{{ demandeDevis.professionnel }}</th>
+                                <td class="text-center">{{ demandeDevis.professionnel.socialReason }}</td>
+                                <td>
+                                    {% if demandeDevis.statut.value == "todo" %}
+                                        <h3><span style="width: 100%" class="shadow text-white badge bg-warning">{{ demandeDevis.statut.libelle }}</span></h3>
+                                    {% else %}
+                                        <h3><span style="width: 100%" class="shadow text-white badge bg-success">{{ demandeDevis.statut.libelle }}</span></h3>
+                                    {% endif %}
+                                </td>
+                                <td class="d-flex justify-content-between">
+                                    <a href="{{ path('app_backoffice_dashboard_change_status_of_demande_devis', {id: demandeDevis.id}) }}" onhover="showHisTooltip(this)" class="{% if demandeDevis.statut.value == "done" %}disabled{% endif %} d-flex justify-content-center" data-bs-toggle="tooltip" data-bs-placement="left" title="Traiter le devis">
+                                        <img style="width: 32px;" src="/images/backoffice/check.png" alt="">
+                                    </a>
+                                    <a onclick="openModal('#modalProDevis_{{ demandeDevis.id }}')" data-bs-toggle="modal" data-bs-target="#modalProDevis_{{ demandeDevis.id }}" onhover="showHisTooltip(this)" class="cursor d-flex justify-content-center" data-bs-toggle="tooltip" data-bs-placement="right" title="Afficher la demande de devis">
+                                        <img style="width: 32px;" src="/images/backoffice/depannage.png" alt="">
+                                    </a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalProDevis_{{ demandeDevis.id }}" tabindex="-1" aria-labelledby="modalTitle_{{ demandeDevis.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalTitle_{{ demandeDevis.id }}">DÉTAIL DE LA DEMANDE DE DEVIS</h5>
+                                                    <button type="button" onclick="closeModal('#modalProDevis_{{ demandeDevis.id }}')" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body row">
+                                                    <table class="table col-xl-12 col-md-12 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="text-center table-secondary">Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row" class="text-center">{{ demandeDevis.description }}</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <hr>
+                                                    
+                                                    <table class="table col-12 table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="text-center table-secondary">Détails</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th class="">
+                                                                    <table class="table col-12 table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col" class="text-center">Type de porte</th>
+                                                                                <th scope="col" class="text-center">Hauteur</th>
+                                                                                <th scope="col" class="text-center">Largeur</th>
+                                                                                <th scope="col" class="text-center">Caractéristiques</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="text-center">
+                                                                                    {{ demandeDevis.typePorte.libelle }}
+                                                                                </td>
+                                                                                <td class="text-center">
+                                                                                    {{ demandeDevis.infoPorte.hauteur }}
+                                                                                </td>
+                                                                                <td class="text-center">
+                                                                                    {{ demandeDevis.infoPorte.largeur }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <ul>
+                                                                                        {% if demandeDevis.infoPorte.isEcoinCon is defined and demandeDevis.infoPorte.isEcoinCon is not null and demandeDevis.infoPorte.isEcoinCon == true %}
+                                                                                            <li>Ecoinçon</li>
+                                                                                        {% endif %}
+
+                                                                                        {% if demandeDevis.infoPorte.isPassageLibre is defined and demandeDevis.infoPorte.isPassageLibre is not null and demandeDevis.infoPorte.isPassageLibre == true %}
+                                                                                            <li>Passage libre</li>
+                                                                                        {% endif %}
+
+                                                                                        {% if demandeDevis.infoPorte.isRetombe is defined and demandeDevis.infoPorte.isRetombe is not null and demandeDevis.infoPorte.isRetombe == true %}
+                                                                                            <li>Retombé de linteau</li>
+                                                                                        {% endif %}
+                                                                                    </ul>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" onclick="closeModal('#modalProDevis_{{ demandeDevis.id }}')">Fermer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gestion des demandes prospects -->
+        {# <div class="card col-xl-6 col-md-12">
+            <div class="card-header text-center">Gestion des demandes prospects</div>
+            <div class="card-body">
+                <table class="table" id="gestionProspectDatatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Téléphone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div> #}
+    </div>
+
+    {# <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Dropdown Header:</div>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="myAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Dropdown Header:</div>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="myPieChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Direct
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Social
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Referral
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                </div>
+                <div class="card-body">
+                    <h4 class="small font-weight-bold">Server Migration <span
+                            class="float-right">20%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Sales Tracking <span
+                            class="float-right">40%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Customer Database <span
+                            class="float-right">60%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar" role="progressbar" style="width: 60%"
+                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Payout Details <span
+                            class="float-right">80%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Account Setup <span
+                            class="float-right">Complete!</span></h4>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color System -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-primary text-white shadow">
+                        <div class="card-body">
+                            Primary
+                            <div class="text-white-50 small">#4e73df</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            Success
+                            <div class="text-white-50 small">#1cc88a</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-info text-white shadow">
+                        <div class="card-body">
+                            Info
+                            <div class="text-white-50 small">#36b9cc</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-warning text-white shadow">
+                        <div class="card-body">
+                            Warning
+                            <div class="text-white-50 small">#f6c23e</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-danger text-white shadow">
+                        <div class="card-body">
+                            Danger
+                            <div class="text-white-50 small">#e74a3b</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-secondary text-white shadow">
+                        <div class="card-body">
+                            Secondary
+                            <div class="text-white-50 small">#858796</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-light text-black shadow">
+                        <div class="card-body">
+                            Light
+                            <div class="text-black-50 small">#f8f9fc</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card bg-dark text-white shadow">
+                        <div class="card-body">
+                            Dark
+                            <div class="text-white-50 small">#5a5c69</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <!-- Illustrations -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                            src="img/undraw_posting_photo.svg" alt="...">
+                    </div>
+                    <p>Add some quality, svg illustrations to your project courtesy of <a
+                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
+                        constantly updated collection of beautiful svg images that you can use
+                        completely free and without attribution!</p>
+                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
+                        unDraw &rarr;</a>
+                </div>
+            </div>
+
+            <!-- Approach -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                </div>
+                <div class="card-body">
+                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
+                        CSS bloat and poor page performance. Custom CSS classes are used to create
+                        custom components and custom utility classes.</p>
+                    <p class="mb-0">Before working with this theme, you should become familiar with the
+                        Bootstrap framework, especially the utility classes.</p>
+                </div>
+            </div>
+
+        </div>
+    </div> #}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function showHisTooltip(element){
+            console.log("ok")
+            console.log($(element))
+        }
+
+        function openModal(idModal){
+            $(idModal).modal('show');
+        }
+
+        function closeModal(idModal){
+            $(idModal).modal('hide');
+        }
+
+        let databaleTraduction = {
+            responsive: true,
+            "oLanguage": {
+                "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Afficher _MENU_ éléments",
+                "sLoadingRecords": "Chargement...",
+                "sProcessing": "Traitement...",
+                "sSearch": "Rechercher :",
+                "sZeroRecords": "Aucun élément correspondant trouvé",
+                "oPaginate": {
+                    "sFirst": "Premier",
+                    "sLast": "Dernier",
+                    "sNext": "Suivant",
+                    "sPrevious": "Précédent"
+                },
+                "oAria": {
+                    "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                    "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                },
+                "select": {
+                    "rows": {
+                        "_": "%d lignes sélectionnées",
+                        "0": "Aucune ligne sélectionnée",
+                        "1": "1 ligne sélectionnée"
+                    }
+                }
+            }
+        };
+
+        $(document).ready(function () {
+            $('#gestionProDatatable').DataTable(databaleTraduction);
+            $('#gestionProDevisDatatable').DataTable(databaleTraduction);
+            $('#gestionProspectDatatable').DataTable(databaleTraduction);
+        });
+    </script>
+{% endblock %}

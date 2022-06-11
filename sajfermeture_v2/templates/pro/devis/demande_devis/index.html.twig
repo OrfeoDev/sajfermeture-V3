@@ -1,0 +1,60 @@
+{% extends 'base_pro.html.twig' %}
+
+{% block title %}ESPACE PRO - DEMANDE DE DEVIS{% endblock %}
+
+{% block body %}
+     <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <!-- Masthead Avatar Image-->
+            <img class="masthead-avatar mb-5" src="/assets/img/pro/tournevis.png" alt="..." />
+            <!-- Masthead Heading-->
+
+            <div class="d-flex justify-content-center mt-5" style="width: 100%">
+                <div class="card" style="width: 100%">
+                    <div class="card-header">
+                        <h5 class="card-title text-muted">MA DEMANDE DE DEVIS</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                            <div class="row typePorteClass border p-2 mt-2 ">
+                                <div class="col-12">
+                                    <label for="" class="form-label text-muted">Infos porte</label>
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.typePorte) }}    
+                                    {{ form_widget(form.typePorte) }}
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.infoPorte.hauteur) }}
+                                    {{ form_widget(form.infoPorte.hauteur) }}
+                                </div>
+                                <div class="col-3">
+                                    {{ form_label(form.infoPorte.largeur) }}
+                                    {{ form_widget(form.infoPorte.largeur) }}
+                                </div>
+                                <div class="col-3">
+                                    <label class="form-label text-muted" for="">Caractéristiques</label>
+                                    {{ form_widget(form.infoPorte.isEcoinCon) }}
+                                    {{ form_widget(form.infoPorte.isPassageLibre) }}
+                                    {{ form_widget(form.infoPorte.isRetombe) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_label(form.description) }}
+                                    {{ form_widget(form.description) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_label(form.TypeMoteur) }}
+                                    {{ form_widget(form.TypeMoteur) }}
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-success mt-3">Envoyer</button>
+                        {{ form_end(form) }}
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}

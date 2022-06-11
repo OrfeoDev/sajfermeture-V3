@@ -1,0 +1,32 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %}VÉRIFICATION DU CODE D'ACCÈS{% endblock %}
+
+{% block body %}
+<div class="container">
+    <!-- Flash message -->
+    {% for label, messages in app.flashes %}
+        <div class="text-center shadow alert alert-{{ label }} font-weight-bold">
+            {% for message in messages %}
+                <p>{{ message|raw }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <div class="row mt-2">
+        <div class="wrapper fadeInDown col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card shadow card-signin my-5">
+                <div class="card-body">
+                    <div class="fadeIn first mt-2 d-flex justify-content-center">
+                        <i class="far fa-user-circle fa-4x text-info text-center"></i>
+                    </div>
+                    <h1 class="text-center text-muted h5 mb-3 font-weight-bold">VÉRIFICATION DU CODE D'ACCÈS</h1>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-block btn-success">ENVOYER</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
